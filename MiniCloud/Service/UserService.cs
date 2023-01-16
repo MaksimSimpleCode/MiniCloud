@@ -1,6 +1,9 @@
 ﻿using Application.Interfaces;
+using AutoMapper;
 using Domain;
+using Microsoft.AspNetCore.Mvc;
 using MiniCloud.Helpers;
+using MiniCloud.Models;
 
 namespace MiniCloud.Service
 {
@@ -8,13 +11,13 @@ namespace MiniCloud.Service
     {
         private readonly IRepository<User> _userRepository;
         private readonly IConfiguration _configuration;
-        //private readonly IMapper _mapper;
+        private readonly IMapper _mapper;
 
-        public UserService(IRepository<User> userRepository, IConfiguration configuration/*, IMapper mapper*/)
+        public UserService(IRepository<User> userRepository, IConfiguration configuration, IMapper mapper)
         {
             _userRepository = userRepository;
             _configuration = configuration;
-           // _mapper = mapper;
+            _mapper = mapper;
         }
 
         public AuthenticateResponse Authenticate(AuthenticateRequest model)
@@ -34,11 +37,19 @@ namespace MiniCloud.Service
             return new AuthenticateResponse(user, token);
         }
 
-        //TODO поменять USER на View модел. Добавить AutoMapper или Mapster
-        public async Task<AuthenticateResponse> Register(User userModel)
+        //TODO Реализовать проверку UserExist по Email. Сделать возвращаемым значением интерфейс IAuthenticateResponse
+        public async Task<IActionResult> Register(UserModel userModel)
         {
-            //var user = _mapper.Map<User>(userModel);
-            var user = new User();
+            var userExist=_userRepository.GetAll().FirstOrDefault(u=>u.Email == userModel.Email);
+            if(userExist != null) {
+                // throw new Exception("User exist!");
+                return new StatusCodeResult(409);
+            }
+
+            var user = _mapper.Map<User>(userModel);
+            var registerData = DateTime.UtcNow;
+            user.CreatedOn = registerData;
+            user.ModefiedOn = registerData;
 
             var addedUser = await _userRepository.Add(user);
 
@@ -48,7 +59,7 @@ namespace MiniCloud.Service
                 Password = user.Password
             });
 
-            return response;
+            return (IActionResult)response;
         }
 
         public IEnumerable<User> GetAll()

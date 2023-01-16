@@ -2,6 +2,7 @@
 using Domain;
 using Microsoft.AspNetCore.Mvc;
 using MiniCloud.Helpers;
+using MiniCloud.Models;
 
 namespace MiniCloud.Controllers
 {
@@ -26,9 +27,8 @@ namespace MiniCloud.Controllers
             return Ok(response);
         }
 
-        //TODO нужна ViewModel вместо User
         [HttpPost("register")]
-        public async Task<IActionResult> Register(User userModel)
+        public async Task<IActionResult> Register(UserModel userModel)
         {
             var response = await _userService.Register(userModel);
 

@@ -9,7 +9,7 @@ namespace Persistence
     {
         public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
         {
-            var connectionString = configuration["DefaultConnection"];
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<UserDbContext>(options =>
             {
                 options.UseNpgsql(connectionString);
