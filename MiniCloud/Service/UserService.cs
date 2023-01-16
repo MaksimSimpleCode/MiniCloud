@@ -38,12 +38,11 @@ namespace MiniCloud.Service
         }
 
         //TODO Реализовать проверку UserExist по Email. Сделать возвращаемым значением интерфейс IAuthenticateResponse
-        public async Task<IActionResult> Register(UserModel userModel)
+        public async Task<AuthenticateResponse> Register(UserModel userModel)
         {
             var userExist=_userRepository.GetAll().FirstOrDefault(u=>u.Email == userModel.Email);
             if(userExist != null) {
-                // throw new Exception("User exist!");
-                return new StatusCodeResult(409);
+                return new AuthenticateResponse("User alrady exist!");
             }
 
             var user = _mapper.Map<User>(userModel);
@@ -58,8 +57,8 @@ namespace MiniCloud.Service
                 Username = user.UserName,
                 Password = user.Password
             });
-
-            return (IActionResult)response;
+            response.Message = "Sucess!";
+            return   response;
         }
 
         public IEnumerable<User> GetAll()

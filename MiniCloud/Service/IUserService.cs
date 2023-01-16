@@ -12,7 +12,7 @@ namespace Application.Interfaces
     public interface IUserService
     {
         AuthenticateResponse Authenticate(AuthenticateRequest model);
-        Task<IActionResult> Register(UserModel userModel);
+        Task<AuthenticateResponse> Register(UserModel userModel);
         IEnumerable<User> GetAll();
         User GetById(Guid id);
     }

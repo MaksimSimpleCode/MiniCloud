@@ -9,7 +9,15 @@ using MiniCloud.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder => builder
+        .WithOrigins("https://localhost:44451")
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials());
+});
 builder.Services.AddControllersWithViews();
 
 //Инфраструктура
@@ -18,6 +26,7 @@ builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddScoped(typeof(IRepository<>), typeof(UserRepository<>));
 builder.Services.AddAutoMapper(typeof(UserProfile));
 builder.Services.AddScoped<IUserService, UserService>();
+
 
 var app = builder.Build();
 
@@ -29,13 +38,19 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 app.UseDeveloperExceptionPage();
+
+
+
+
 //Кастомный jwt
 app.UseCustomJwtMiddleware();
 
-app.UseHttpsRedirection();
+
+//app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
+app.UseCors("AllowSpecificOrigin");
 app.UseAuthentication();
 app.UseAuthorization();
 
