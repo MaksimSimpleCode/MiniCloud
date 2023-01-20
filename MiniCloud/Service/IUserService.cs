@@ -15,5 +15,6 @@ namespace Application.Interfaces
         Task<AuthenticateResponse> Register(UserModel userModel);
         IEnumerable<User> GetAll();
         User GetById(Guid id);
+        //Task<string> Auth(Guid id);
     }
 }

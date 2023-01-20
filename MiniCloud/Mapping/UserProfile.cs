@@ -10,7 +10,7 @@ namespace MiniCloud.Mapping
         {
             CreateMap<UserModel, User>()
                 .ForMember(dst => dst.Email, opt => opt.MapFrom(src => src.Email))
-                .ForMember(dst => dst.UserName, opt => opt.MapFrom(src => src.UserName))
+                //.ForMember(dst => dst.UserName, opt => opt.MapFrom(src => src.UserName))
                 .ForMember(dst => dst.Password, opt => opt.MapFrom(src => src.Password))
                 .ForMember(dst => dst.Id, opt => opt.Ignore());
 

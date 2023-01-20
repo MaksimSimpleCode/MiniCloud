@@ -3,6 +3,7 @@ using Domain;
 using Microsoft.AspNetCore.Mvc;
 using MiniCloud.Helpers;
 using MiniCloud.Models;
+using System.Security.Claims;
 
 namespace MiniCloud.Controllers
 {
@@ -39,6 +40,27 @@ namespace MiniCloud.Controllers
 
             return Ok(response);
         }
+
+
+        //[HttpGet("auth")]
+        //public async Task<IActionResult> Auth()
+        //{
+        //    var id = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+        //    if(id == null)
+        //    {
+        //        return StatusCode(401);
+        //    }
+        //    var userId = id;
+        //    var response = await _userService.Auth(Guid.Parse(userId));
+
+        //    if (response == null)
+        //    {
+        //        return BadRequest(new { message = "Didn't auth" });
+        //    }
+
+        //    return Ok(response);
+        //}
+
 
         [HttpGet]
         [Authorize]

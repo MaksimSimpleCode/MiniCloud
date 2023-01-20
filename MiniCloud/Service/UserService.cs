@@ -4,6 +4,7 @@ using Domain;
 using Microsoft.AspNetCore.Mvc;
 using MiniCloud.Helpers;
 using MiniCloud.Models;
+using System.Text.Json;
 
 namespace MiniCloud.Service
 {
@@ -24,7 +25,7 @@ namespace MiniCloud.Service
         {
             var user = _userRepository
                 .GetAll()
-                .FirstOrDefault(x => x.UserName == model.Username && x.Password == model.Password);
+                .FirstOrDefault(x => x.Email == model.Email && x.Password == model.Password);
 
             if (user == null)
             {
@@ -54,12 +55,36 @@ namespace MiniCloud.Service
 
             var response = Authenticate(new AuthenticateRequest
             {
-                Username = user.UserName,
+                //Username = user.UserName,
+                Email = user.Email,
                 Password = user.Password
             });
             response.Message = "Sucess!";
             return   response;
         }
+
+
+        //public async Task<string> Auth(Guid id)
+        //{
+        //    var user = _userRepository.GetById(id);
+        //    if (user!= null)
+        //    {
+        //        var response = new
+        //        {
+        //            id = user.Id,
+        //            email = user.Email,
+        //            diskSpace = user.DiskSpace,
+        //            usedSpace = user.UsedSpace,
+        //            avatar = user.Avatar
+
+        //        };
+
+        //        string json = JsonSerializer.Serialize(response);
+        //        return  json;
+        //    }
+
+        //    return JsonSerializer.Serialize(new {message = "User not found"});
+        //}
 
         public IEnumerable<User> GetAll()
         {
